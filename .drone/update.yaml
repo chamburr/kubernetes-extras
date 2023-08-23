@@ -1,0 +1,58 @@
+---
+kind: pipeline
+name: update
+
+steps:
+  - name: build rpms
+    image: rockylinux:9
+    commands:
+      - dnf install -y git jq
+      - mkdir SOURCES
+      - find .drone/scripts -type f -exec {} \;
+      - git stage SPECS
+      - git diff --staged --name-only --exit-code SPECS && exit 78
+      - dnf install -y createrepo rpm-build
+      - git diff --staged --name-only SPECS | sed -e 's/SPECS\///' -e 's/.spec//' |
+        xargs -I{} find RPMS -name "{}*" -delete
+      - git diff --staged --name-only SPECS | xargs -L1 rpmbuild -bb --define "_topdir $PWD"
+      - git reset
+      - createrepo --update .
+      - rm -rf BUILD BUILDROOT SOURCES SRPMS
+  - name: generate token
+    image: ubuntu
+    commands:
+      - apt-get -qq update
+      - apt-get install -y curl jq
+      - url=$(curl -s https://api.github.com/repos/slawekzachcial/gha-token/releases/latest |
+        jq -r '.assets[] | select(.name | contains("linux")).browser_download_url')
+      - curl -sL $url | tar x -C /tmp
+      - echo "$GITHUB_PRIVATE_KEY" > /tmp/private-key.pem
+      - /tmp/gha-token -a $GITHUB_ID -k /tmp/private-key.pem -r chamburr/kubernetes-extras >
+        token.txt
+    environment:
+      GITHUB_ID:
+        from_secret: github_id
+      GITHUB_PRIVATE_KEY:
+        from_secret: github_private_key
+  - name: push changes
+    image: appleboy/drone-git-push
+    commands:
+      - unset GIT_COMMITTER_NAME GIT_COMMITTER_EMAIL
+      - export DRONE_NETRC_MACHINE=github.com
+      - export DRONE_NETRC_USERNAME=x-access-token
+      - export DRONE_NETRC_PASSWORD=$(cat token.txt)
+      - rm token.txt
+      - /bin/drone-git-push
+    settings:
+      remote_name: origin
+      branch: master
+      commit: true
+      commit_message: "build: update packages"
+      author_name: chamburr-bot
+      author_email: 113156419+chamburr-bot[bot]@users.noreply.github.com
+
+trigger:
+  event:
+    - cron
+  cron:
+    - daily
