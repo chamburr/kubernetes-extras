@@ -1,0 +1,9 @@
+# Trash
+.DS_Store
+Thumbs.db
+
+# RPM build
+BUILD
+BUILDROOT
+SOURCES
+SRPMS
