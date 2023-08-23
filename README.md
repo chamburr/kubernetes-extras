@@ -11,7 +11,7 @@ You can add this repository by copying the following to `/etc/yum.repos.d/kubern
 ```ini
 [kubernetes-extras]
 name = Kubernetes Extras
-baseurl = https://raw.githubusercontent.com/chamburr/kubernetes-extras
+baseurl = https://raw.githubusercontent.com/chamburr/kubernetes-extras/master
 gpgcheck = 0
 ```
 
