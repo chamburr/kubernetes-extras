@@ -12,7 +12,7 @@ steps:
       - git stage SPECS
       - git diff --staged --name-only --exit-code SPECS && exit 78
       - dnf install -y createrepo rpm-build
-      - git diff --staged --name-only SPECS | sed -e 's/SPECS\///' -e 's/.spec//' |
+      - git diff --staged --name-only SPECS | sed -e 's/SPECS\\///' -e 's/.spec//' |
         xargs -I{} find RPMS -name "{}*" -delete
       - git diff --staged --name-only SPECS | xargs -L1 rpmbuild -bb --define "_topdir $PWD"
       - git reset
