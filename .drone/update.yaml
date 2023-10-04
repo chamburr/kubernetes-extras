@@ -45,7 +45,7 @@ steps:
       - /bin/drone-git-push
     settings:
       remote_name: origin
-      branch: master
+      branch: main
       commit: true
       commit_message: "build: update packages"
       author_name: chamburr-bot
