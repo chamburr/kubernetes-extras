@@ -1,10 +1,10 @@
 Name:           helm
-Version:        3.14.2
+Version:        3.14.3
 Release:        1%{?dist}
 Summary:        Helm control application
 
 License:        MPLv2
-Source0:        helm-3.14.2.tar.gz
+Source0:        helm-3.14.3.tar.gz
 
 %global debug_package %{nil}
 %global _missing_build_ids_terminate_build 0
