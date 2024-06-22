@@ -1,10 +1,10 @@
 Name:           talos
-Version:        1.7.4
+Version:        1.7.5
 Release:        1%{?dist}
 Summary:        Talos Linux control application
 
 License:        MPLv2
-Source0:        talos-1.7.4.tar.gz
+Source0:        talos-1.7.5.tar.gz
 
 %global debug_package %{nil}
 %global _missing_build_ids_terminate_build 0
