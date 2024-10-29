@@ -1,10 +1,10 @@
 Name:           talos
-Version:        1.8.1
+Version:        1.8.2
 Release:        1%{?dist}
 Summary:        Talos Linux control application
 
 License:        MPLv2
-Source0:        talos-1.8.1.tar.gz
+Source0:        talos-1.8.2.tar.gz
 
 %global debug_package %{nil}
 %global _missing_build_ids_terminate_build 0
